@@ -1,7 +1,9 @@
 import "./App.css";
-import { useEffect, useState, useReducer, useRef } from "react";
+import { useEffect, useState, useReducer, useRef, useContext } from "react";
 import useInput from "./useInput";
 import { FaStar } from "react-icons/fa";
+// import { useTrees } from "./main";
+import { useFetch } from "./useFetch";
 
 // const createArray = (length) => [...Array(length)];
 
@@ -79,7 +81,6 @@ function App() {
 	// 		<button onClick={() => setAdmin(true)}>Login</button>
 	// 	</section>
 	// );
-
 	//Use effect hook
 	// const [data, setData] = useState([]);
 	// useEffect(() => {
@@ -102,14 +103,12 @@ function App() {
 	// 		</div>
 	// 	);
 	// }
-
 	//use reducer hook
 	// const [number, setNumber] = useReducer(
 	// 	(number, newNumber) => number + newNumber,
 	// 	0
 	// );
 	// return <h1 onClick={() => setNumber(5)}>{number}</h1>;
-
 	// const [checked, setChecked] = useReducer((checked) => !checked, false);
 	// return (
 	// 	<>
@@ -117,7 +116,6 @@ function App() {
 	// 		<p>{checked ? "Checked" : "Not Checked"}</p>
 	// 	</>
 	// );
-
 	// const [state, dispatch] = useReducer(reducer, initialState);
 	// return (
 	// 	<>
@@ -129,31 +127,57 @@ function App() {
 	// 	</>
 	// );
 	// const [state, dispatch] = useReducer(reducer, initialState);
-
 	//Use ref hook
 	// const sound = useRef();
 	// const color = useRef();
-	const [titleProps, resetTitle] = useInput("");
-	const [colorProps, resetColor] = useInput("#000000");
-	console.log(titleProps);
-	console.log(colorProps);
+	// const [titleProps, resetTitle] = useInput("");
+	// const [colorProps, resetColor] = useInput("#000000");
+	// console.log(titleProps);
+	// console.log(colorProps);
+	// function submit(e) {
+	// 	e.preventDefault();
+	// 	// const soundValue = sound.current.value;
+	// 	// const colorValue = color.current.value;
+	// 	alert(`${titleProps.value} sounds like ${colorProps.value}`);
+	// 	resetTitle("");
+	// 	resetColor("#000000");
+	// }
+	// return (
+	// 	<>
+	// 		<form onSubmit={submit}>
+	// 			<input {...titleProps} type="text" placeholder="Sound..." />
+	// 			<input {...colorProps} type="color" />
+	// 			<button>Add</button>
+	// 		</form>
+	// 	</>
+	// );
+	//Use context hook
+	// const { trees } = useTrees();
+	// console.log(trees);
+	// return (
+	// 	<div>
+	// 		<h1>Trees I've heard of</h1>
+	// 		<ul>
+	// 			{trees.map((tree, index) => (
+	// 				<li key={index}>{tree.type}</li>
+	// 			))}
+	// 		</ul>
+	// 	</div>
+	// );
 
-	function submit(e) {
-		e.preventDefault();
-		// const soundValue = sound.current.value;
-		// const colorValue = color.current.value;
-		alert(`${titleProps.value} sounds like ${colorProps.value}`);
-		resetTitle("");
-		resetColor("#000000");
+	const { data, loading, error } = useFetch(`https://api.github.com/users`);
+	if (loading) {
+		return <h1>Loading...</h1>;
 	}
+
+	if (error) {
+		return <pre>{JSON.stringify(error, null, 2)}</pre>;
+	}
+
 	return (
-		<>
-			<form onSubmit={submit}>
-				<input {...titleProps} type="text" placeholder="Sound..." />
-				<input {...colorProps} type="color" />
-				<button>Add</button>
-			</form>
-		</>
+		<div>
+			<pre>{JSON.stringify(data, null, 2)}</pre>
+		</div>
 	);
 }
 
